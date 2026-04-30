@@ -1,7 +1,7 @@
-#Git Convention
+#   Git Convention
 
 
-##1. 커밋 메시지 구조
+##   1. 커밋 메시지 구조
 
 
 Type: Subject
@@ -14,25 +14,34 @@ Type: Subject
 ***
 
 
-##2. Type (태그)  
+##   2. Type (태그)  
 
 
 Feat: 새로운 기능 추가
+
 Fix:  버그 수정
+
 Design:  CSS 등 사용자 UI 디자인 변경
+
 Docs:  "문서 수정 (README, Wiki 등)"
+
 Refactor:  코드 리팩토링 (기능 변경 없는 코드 개선)
+
 Style:  "코드 포맷팅, 세미콜론 누락 수정 (로직 변경 없음)"
+
 Test:  테스트 코드 추가 및 수정
+
 Chore:  "빌드 업무 수정, 패키지 관리, .gitignore 수정 등 잡무"
+
 Rename: 파일명, 폴더명만 수정한 경우
+
 Remove: 파일을 삭제만 한 경우
 
 
 ***
 
 
-##3. 작성 규칙 (Rules)
+##   3. 작성 규칙 (Rules)
 
 제목(Subject): 50자 이내로 작성하며, 마지막에 마침표(.)를 찍지 않습니다.
 
@@ -46,7 +55,7 @@ Remove: 파일을 삭제만 한 경우
 ***
 
 
-##4. 실제 예시 (Examples) -> Type: Subject 예시
+##   4. 실제 예시 (Examples) -> Type: Subject 예시
    
 Feat: 로그인 페이지 이메일 유효성 검사 로직 추가
 
