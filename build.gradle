@@ -1,0 +1,59 @@
+plugins {
+	// [플러그인 설정] 프로젝트 빌드 및 스프링 부트 환경을 구성하는 핵심 도구들입니다.
+	id 'java' // 자바 프로젝트 빌드를 위한 기본 플러그인
+	id 'org.springframework.boot' version '4.0.6' // 스프링 부트 플러그인 (현재 프로젝트 버전)
+	id 'io.spring.dependency-management' version '1.1.7' // 스프링 부트 버전에 맞춰 하위 라이브러리들의 버전을 꼬이지 않게 자동 관리해주는 플러그인
+}
+
+// [프로젝트 메타데이터]
+group = 'SW_PinWord' // 프로젝트의 그룹 ID (보통 팀명이나 도메인을 적습니다)
+version = '0.0.1-SNAPSHOT' // 현재 프로젝트의 버전 (SNAPSHOT은 아직 한창 개발 중인 버전임을 의미합니다)
+
+java {
+	// [자바 버전 설정]
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21) // 이 프로젝트는 Java 21 버전을 기준으로 실행되도록 강제합니다.
+	}
+}
+
+repositories {
+	// [라이브러리 다운로드 저장소]
+	mavenCentral() // 아래 dependencies에 적힌 외부 라이브러리들을 전 세계 표준 저장소인 Maven Central에서 안전하게 다운로드해 옵니다.
+}
+
+dependencies {
+	// 1. [데이터베이스] Spring Data JPA
+	// 자바 객체(Entity)와 MySQL 데이터베이스의 테이블을 자동으로 연결(매핑)해주는 핵심 라이브러리입니다.
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	// 2. [웹 API] Spring Web MVC
+	// 웹 브라우저나 프론트엔드의 요청을 받고 응답하는 REST API 서버를 만들기 위한 필수 라이브러리입니다.
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+
+	// 3. [생산성 향상] Lombok (롬복)
+	// Getter, Setter, 생성자 등의 길고 반복적인 코드를 @Getter 같은 어노테이션 하나로 깔끔하게 자동 생성해 줍니다.
+	compileOnly 'org.projectlombok:lombok' // 코드를 짤 때(컴파일 시)만 사용됨
+	annotationProcessor 'org.projectlombok:lombok' // 빌드할 때 롬복 어노테이션을 실제 코드로 변환해 줌
+
+	// 4. [개발 편의성] Spring Boot DevTools
+	// 코드를 수정하고 저장하면, 무거운 서버를 완전히 껐다 켤 필요 없이 변경된 부분만 빠르게 반영(Hot Reload)해 줍니다.
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// 5. [DB 드라이버] MySQL Connector
+	// 우리가 띄워둔 스프링 부트 서버가 실제 MySQL 데이터베이스에 접속하고 통신할 수 있게 해주는 전용 다리(커넥터)입니다.
+	runtimeOnly 'com.mysql:mysql-connector-j'
+
+	// =========================================================================
+	// 6. [테스트 환경] 아래는 모두 '테스트 코드'를 작성하고 실행할 때만 사용되는 도구들입니다.
+	// =========================================================================
+	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test' // DB(JPA) 관련 테스트 도우미
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test' // 웹 API(컨트롤러) 테스트 도우미
+	testCompileOnly 'org.projectlombok:lombok' // 테스트 폴더 안에서도 롬복 사용 허용
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher' // 실제 테스트를 실행해주는 엔진
+	testAnnotationProcessor 'org.projectlombok:lombok' // 테스트 폴더용 롬복 변환기
+}
+
+tasks.named('test') {
+	// [테스트 실행 환경 세팅]
+	useJUnitPlatform() // 프로젝트의 테스트 코드를 실행할 때, 가장 최신 표준 엔진인 'JUnit 5'를 사용하도록 설정합니다.
+}
