@@ -32,4 +32,10 @@ public class User {
     // 회원의 이름이나 닉네임 (최대 50자까지만 허용하여 DB 용량 낭비를 막습니다)
     @Column(nullable = false, length = 50)
     private String name;
+
+    // ✨ 추가된 권한 필드 2026.05.05_권용준
+    // ROLE_USER, ROLE_ADMIN 등의 값이 저장됩니다.
+    // 기본값을 "ROLE_USER"로 설정하여 회원가입 시 자동으로 일반 권한을 부여합니다.
+    @Column(nullable = false, length = 20)
+    private String role = "ROLE_USER";
 }
