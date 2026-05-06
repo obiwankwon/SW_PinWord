@@ -35,4 +35,17 @@ public class QuizDto {
             Long paperId,
             List<SubmitRequest> answers
     ) {}
+
+    // 💡 [신규] 통계 정보를 담을 상자
+    public record QuizStatisticsResponse(
+            long totalQuizzes,       // 누적 학습량
+            double averageScore,     // 평균 정답률(점수)
+            List<ScoreHistory> recentScores // 최근 학습 추이 (차트용)
+    ) {}
+
+    // 💡 [신규] 차트에 들어갈 점수 하나하나의 규격
+    public record ScoreHistory(
+            String date, // 푼 날짜 (예: "05/06 14:30")
+            int score    // 점수
+    ) {}
 }
