@@ -45,4 +45,11 @@ public class QuizController {
         
         return ResponseEntity.ok("퀴즈 완료! 당신의 점수는 " + finalScore + "점입니다!");
     }
+
+    // 💡 4. [신규] 퀴즈 통계 가져오기 (GET /stats)
+    @GetMapping("/stats")
+    public ResponseEntity<QuizDto.QuizStatisticsResponse> getStats(Principal principal) {
+        Long userId = Long.parseLong(principal.getName());
+        return ResponseEntity.ok(quizService.getStatistics(userId));
+    }
 }
