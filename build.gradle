@@ -12,7 +12,7 @@ version = '0.0.1-SNAPSHOT' // 현재 프로젝트의 버전 (SNAPSHOT은 아직 
 java {
 	// [자바 버전 설정]
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21) // 이 프로젝트는 Java 21 버전을 기준으로 실행되도록 강제합니다.
+		languageVersion = JavaLanguageVersion.of(25) // 이 프로젝트는 Java 21 버전을 기준으로 실행되도록 강제합니다.
 	}
 }
 
@@ -44,7 +44,18 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// =========================================================================
-	// 6. [테스트 환경] 아래는 모두 '테스트 코드'를 작성하고 실행할 때만 사용되는 도구들입니다.
+    // ✨ [추가] 6. 보안 및 인증 도구 (Security & JWT) 20260505
+    // =========================================================================
+    // 6-1. [보안 뼈대] 스프링 부트 애플리케이션에 API 접근 제어, 비밀번호 암호화 등의 보안 기능을 부여합니다.
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // 6-2. [JWT 생성/검증] JWT(JSON Web Token)를 발급하고 해석하기 위한 필수 라이브러리 세트입니다.
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // JWT 기본 규칙(인터페이스)
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'   // 실제 작동 로직 (실행 시에만 필요)
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // 내부 데이터를 자바 객체로 변환해 주는 도구
+
+	// =========================================================================
+	// 7. [테스트 환경] 아래는 모두 '테스트 코드'를 작성하고 실행할 때만 사용되는 도구들입니다.
 	// =========================================================================
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test' // DB(JPA) 관련 테스트 도우미
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test' // 웹 API(컨트롤러) 테스트 도우미
