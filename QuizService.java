@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
@@ -110,5 +111,31 @@ public class QuizService {
         quizResultRepository.save(result);
         
         return score;
+    }
+
+    @Transactional(readOnly = true)
+    public QuizDto.QuizStatisticsResponse getStatistics(Long userId) {
+        // 1. 유저의 모든 퀴즈 기록 가져오기
+        List<QuizResult> results = quizResultRepository.findAllByUser_UserIdOrderByStartTimeAsc(userId);
+        
+        // 2. 누적 학습량
+        long totalQuizzes = results.size();
+        
+        // 3. 평균 점수 (기록이 없으면 0점)
+        double averageScore = results.stream().mapToInt(QuizResult::getScore).average().orElse(0.0);
+        // 소수점 첫째 자리까지만 예쁘게 자르기 (예: 85.3)
+        averageScore = Math.round(averageScore * 10) / 10.0;
+
+        // 4. 최근 학습 추이 (최대 최근 5개만 뽑기)
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd HH:mm");
+        List<QuizDto.ScoreHistory> recentScores = results.stream()
+                .skip(Math.max(0, results.size() - 5)) // 뒤에서 5개만 자르기
+                .map(r -> new QuizDto.ScoreHistory(
+                        r.getStartTime().format(formatter), 
+                        r.getScore()
+                ))
+                .collect(Collectors.toList());
+
+        return new QuizDto.QuizStatisticsResponse(totalQuizzes, averageScore, recentScores);
     }
 }
