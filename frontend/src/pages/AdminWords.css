@@ -1,0 +1,181 @@
+.admin-words-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #c0392b;
+  margin-bottom: 24px;
+}
+
+.add-word-section {
+  background: #fff5f5;
+  border: 1px solid #fad7d7;
+  padding: 24px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+}
+
+.add-word-section h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 16px;
+}
+
+.add-word-form {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.add-word-form input,
+.add-word-form select {
+  padding: 10px 14px;
+  border: 2px solid #e8ecef;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  flex: 1;
+  min-width: 120px;
+}
+
+.add-word-form input:focus,
+.add-word-form select:focus {
+  border-color: #c0392b;
+}
+
+.add-word-btn {
+  padding: 10px 20px;
+  background: #c0392b;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+}
+
+.add-word-btn:hover {
+  opacity: 0.85;
+}
+
+.word-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.word-item {
+  background: #ffffff;
+  border: 1px solid #e8ecef;
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.word-item-view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.word-item-info strong {
+  font-size: 18px;
+  color: #2c3e50;
+  margin-right: 8px;
+}
+
+.word-item-info span {
+  font-size: 14px;
+  color: #7f8c8d;
+}
+
+.word-item-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn {
+  padding: 6px 14px;
+  background: #f39c12;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+
+.edit-btn:hover {
+  opacity: 0.85;
+}
+
+.delete-btn {
+  padding: 6px 14px;
+  background: #7f8c8d;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 0.85;
+}
+
+.word-item-edit {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.word-item-edit input,
+.word-item-edit select {
+  padding: 8px 12px;
+  border: 2px solid #e8ecef;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  flex: 1;
+  min-width: 100px;
+  transition: border-color 0.2s;
+}
+
+.word-item-edit input:focus,
+.word-item-edit select:focus {
+  border-color: #27ae60;
+}
+
+.save-btn {
+  padding: 7px 14px;
+  background: #27ae60;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+
+.save-btn:hover {
+  opacity: 0.85;
+}
+
+.cancel-btn {
+  padding: 7px 14px;
+  background: #95a5a6;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  transition: opacity 0.2s;
+}
+
+.cancel-btn:hover {
+  opacity: 0.85;
+}
