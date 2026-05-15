@@ -41,21 +41,31 @@ public class DataInitializer implements ApplicationRunner {
                 if (isHeader) { isHeader = false; continue; }
 
                 String[] parts = line.split(",");
+                // 💡 [수정] 데이터가 4개(이미지 포함)인지 확인
                 if (parts.length < 3) continue;
 
                 String spelling = parts[0].trim();
                 String meaning  = parts[1].trim();
                 String pos      = parts[2].trim();
+                
+                // 💡 [신규] 4번째 이미지 파일명 컬럼이 있는지 확인
+                String imageName = (parts.length >= 4) ? parts[3].trim() : null;
 
                 if (!wordRepository.existsByEnglishSpelling(spelling)) {
                     Word word = new Word();
                     word.setEnglishSpelling(spelling);
                     word.setMeaning(meaning);
                     word.setPartOfSpeech(pos);
+                    
+                    // 💡 [핵심] 정적 리소스 경로로 이미지 경로를 미리 세팅합니다.
+                    if (imageName != null && !imageName.isEmpty()) {
+                        word.setImagePath("/default-images/" + imageName);
+                    }
+                    
                     wordRepository.save(word);
                 }
             }
-            System.out.println("[DataInitializer] 단어 초기 데이터 로딩 완료");
+            System.out.println("[DataInitializer] 단어 및 기본 이미지 로딩 완료");
         }
     }
 

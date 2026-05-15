@@ -1,4 +1,3 @@
-// src/main/java/pinword/dto/QuizDto.java
 package pinword.dto;
 
 import java.util.List;
@@ -15,7 +14,9 @@ public class QuizDto {
     public record Question(
             String englishSpelling,
             String correctAnswer,
-            List<String> options
+            List<String> options,
+            // 💡 [신규 추가] 이미지 퀴즈에서 이미지를 띄우기 위한 경로 (일반 퀴즈에선 null)
+            String imagePath 
     ) {}
 
     // (기존) 유저가 푼 답안지 1개 규격

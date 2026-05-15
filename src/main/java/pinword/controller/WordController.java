@@ -3,6 +3,7 @@ package pinword.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import pinword.dto.WordDto;
 import pinword.service.WordService;
 import java.util.List;
@@ -37,6 +38,15 @@ public class WordController {
         return ResponseEntity.ok(words);
     }
 
+    /**
+     * 💡 [신규 추가] 이미지가 등록된 단어 목록만 가져오기 (GET http://localhost:8080/api/words/images)
+     * 핀터레스트 스타일의 이미지 학습 창에서 호출하는 전용 API입니다.
+     */
+    @GetMapping("/words/images")
+    public ResponseEntity<List<WordDto.Response>> getWordsWithImages() {
+        return ResponseEntity.ok(wordService.getWordsWithImages());
+    }
+
     // =========================================================================
     // [관리자(ADMIN)만 사용 가능한 기능: 관리]
     // 주소에 /admin이 포함되어 SecurityConfig에서 관리자만 통과하도록 감시합니다.
@@ -44,27 +54,31 @@ public class WordController {
 
     /**
      * 💡 새 단어 추가하기 (POST http://localhost:8080/api/admin/words)
+     * 💡 [수정됨] POST 방식은 새로운 데이터를 '등록'할 때 씁니다.
+     * 이제 텍스트(word)와 파일(image)을 동시에 받기 위해 @RequestPart를 사용합니다.
      */
-    @PostMapping("/admin/words") // POST 방식은 새로운 데이터를 '등록'할 때 씁니다.
-    public ResponseEntity<?> addWord(@RequestBody WordDto.Request request) {
+    @PostMapping("/admin/words") 
+    public ResponseEntity<?> addWord(
+            @RequestPart("word") WordDto.Request request,
+            @RequestPart(value = "image", required = false) MultipartFile image) { // 이미지는 필수가 아님
         try {
-            // 프론트에서 보낸 단어 데이터(Request)를 서비스에 전달해서 저장합니다.
-            return ResponseEntity.ok(wordService.addWord(request));
+            return ResponseEntity.ok(wordService.addWord(request, image));
         } catch (IllegalArgumentException e) {
-            // 만약 이미 있는 단어라면 에러 메시지를 400(Bad Request) 코드와 함께 보냅니다.
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     /**
      * 💡 단어 정보 수정하기 (PATCH http://localhost:8080/api/admin/words/{wordId})
+     * 💡 [수정됨] PATCH는 데이터의 '일부'만 고칠 때 씁니다. (수정 시 이미지 변경 가능)
      */
-    @PatchMapping("/admin/words/{wordId}") // PATCH는 데이터의 '일부'만 고칠 때 씁니다.
+    @PatchMapping("/admin/words/{wordId}") 
     public ResponseEntity<?> updateWord(
             @PathVariable Long wordId, // 주소창의 {wordId} 숫자를 가져옵니다.
-            @RequestBody WordDto.Request request) { // 수정할 내용을 상자(DTO)로 받습니다.
+            @RequestPart(value = "word", required = false) WordDto.Request request, // 수정할 내용을 상자(DTO)로 받습니다.
+            @RequestPart(value = "image", required = false) MultipartFile image) { // 새 이미지가 있다면 받습니다.
         try {
-            return ResponseEntity.ok(wordService.updateWord(wordId, request));
+            return ResponseEntity.ok(wordService.updateWord(wordId, request, image));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

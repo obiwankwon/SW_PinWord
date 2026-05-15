@@ -49,6 +49,7 @@ public class SecurityConfig {
             
             // 3. API 주소별로 접근 권한을 설정합니다.
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/uploads/**", "/default-images/**").permitAll()
                 // 로그인, 회원가입 API("/api/auth/...")는 누구나 접근 가능해야 합니다. (permitAll)
                 .requestMatchers("/api/auth/**").permitAll() 
                 // 관리자 API("/api/admin/...")는 "ADMIN" 권한을 가진 방문증(토큰)만 접근 가능합니다.

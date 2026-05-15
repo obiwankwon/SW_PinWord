@@ -3,6 +3,7 @@ package pinword.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile; // 👈 신규 추가
 import pinword.dto.WordDto;
 import pinword.entity.Word;
 import pinword.repository.WordRepository;
@@ -22,13 +23,16 @@ public class WordService {
 
     // 창고(DB)에 직접 접근할 수 있는 열쇠를 가진 친구야.
     private final WordRepository wordRepository;
+    
+    // 💡 [신규 추가] 파일을 안전하게 저장할 '파일 저장 요리사'를 데려옵니다.
+    private final FileStorageService fileStorageService; 
 
     /**
-     * 💡 [업무 1] 단어 추가하기
+     * 💡 [업무 1] 단어 추가하기 (이미지 처리 포함)
      * 관리자가 보낸 새 단어 정보를 받아서 DB 창고에 집어넣어.
      */
     @Transactional
-    public WordDto.Response addWord(WordDto.Request request) {
+    public WordDto.Response addWord(WordDto.Request request, MultipartFile image) {
         // 이미 창고에 같은 스펠링의 단어가 있는지 확인해봐.
         if (wordRepository.existsByEnglishSpelling(request.englishSpelling())) {
             throw new IllegalArgumentException("이미 등록된 단어입니다.");
@@ -40,39 +44,40 @@ public class WordService {
         word.setMeaning(request.meaning());
         word.setPartOfSpeech(request.partOfSpeech());
 
+        // 💡 [신규 로직] 파일 저장 요리사에게 파일을 넘겨주고, 저장된 경로를 받아 단어에 붙여줘.
+        String imagePath = fileStorageService.storeFile(image);
+        word.setImagePath(imagePath);
+
         // 창고 관리인(Repository)에게 저장을 부탁해.
         Word savedWord = wordRepository.save(word);
 
         // 저장이 끝나면 "잘 저장됐어!"라고 영수증(Response DTO)을 발행해줘.
-        return new WordDto.Response(
-                savedWord.getWordId(),
-                savedWord.getEnglishSpelling(),
-                savedWord.getMeaning(),
-                savedWord.getPartOfSpeech()
-        );
+        return mapToResponse(savedWord);
     }
 
     /**
-     * 💡 [업무 2] 단어 수정하기
+     * 💡 [업무 2] 단어 수정하기 (이미지 처리 포함)
      * 특정 번호(wordId)의 단어를 찾아서 내용을 고쳐줘.
      */
     @Transactional
-    public WordDto.Response updateWord(Long wordId, WordDto.Request request) {
+    public WordDto.Response updateWord(Long wordId, WordDto.Request request, MultipartFile image) {
         // 일단 해당 번호의 단어가 창고에 있는지 찾아보고, 없으면 에러를 내.
         Word word = wordRepository.findById(wordId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 단어를 찾을 수 없습니다."));
 
         // 단어가 있으면 요청받은 내용으로 한 땀 한 땀 고쳐줘.
-        if (request.meaning() != null) word.setMeaning(request.meaning());
-        if (request.partOfSpeech() != null) word.setPartOfSpeech(request.partOfSpeech());
+        if (request != null) {
+            if (request.meaning() != null) word.setMeaning(request.meaning());
+            if (request.partOfSpeech() != null) word.setPartOfSpeech(request.partOfSpeech());
+        }
+
+        // 💡 [신규 로직] 프론트에서 새로운 이미지를 보냈을 때만 기존 경로를 덮어씌워줘.
+        if (image != null && !image.isEmpty()) {
+            word.setImagePath(fileStorageService.storeFile(image));
+        }
 
         // 수정된 내용을 다시 영수증으로 만들어서 보내줘.
-        return new WordDto.Response(
-                word.getWordId(),
-                word.getEnglishSpelling(),
-                word.getMeaning(),
-                word.getPartOfSpeech()
-        );
+        return mapToResponse(word);
     }
 
     /**
@@ -96,12 +101,29 @@ public class WordService {
         
         // 2. 단어 뭉치를 우리가 프론트엔드에 줄 규격(Response DTO)으로 하나씩 변환해.
         return words.stream()
-                .map(word -> new WordDto.Response(
-                        word.getWordId(),
-                        word.getEnglishSpelling(),
-                        word.getMeaning(),
-                        word.getPartOfSpeech()
-                ))
+                .map(this::mapToResponse) // 변환 로직을 mapToResponse 메서드로 따로 뺐어!
                 .collect(Collectors.toList()); // 3. 변환된 것들을 다시 '목록(List)'으로 묶어서 반환!
+    }
+
+    /**
+     * 💡 [업무 5 신규] 이미지가 있는 단어 목록만 가져오기
+     * 프론트에서 '이미지 학습'이나 '이미지 퀴즈' 창을 열 때, 이미지가 없는 단어는 미리 걸러서 가져옵니다.
+     */
+    @Transactional(readOnly = true)
+    public List<WordDto.Response> getWordsWithImages() {
+        return wordRepository.findByImagePathIsNotNull().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+    // Entity를 Response DTO로 바꾸는 코드를 한 곳에 모아서 재사용성을 높였습니다.
+    private WordDto.Response mapToResponse(Word word) {
+        return new WordDto.Response(
+                word.getWordId(),
+                word.getEnglishSpelling(),
+                word.getMeaning(),
+                word.getPartOfSpeech(),
+                word.getImagePath()
+        );
     }
 }
