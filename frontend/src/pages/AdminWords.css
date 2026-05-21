@@ -60,6 +60,28 @@
   opacity: 0.85;
 }
 
+.generate-image-btn {
+  padding: 8px 14px;
+  background: #6c5ce7;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.generate-image-btn:hover {
+  opacity: 0.85;
+}
+
+.generate-image-btn:disabled {
+  background: #b2bec3;
+  cursor: not-allowed;
+}
+
 .word-list {
   display: flex;
   flex-direction: column;

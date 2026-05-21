@@ -44,9 +44,12 @@ public class WordService {
         word.setMeaning(request.meaning());
         word.setPartOfSpeech(request.partOfSpeech());
 
-        // 💡 [신규 로직] 파일 저장 요리사에게 파일을 넘겨주고, 저장된 경로를 받아 단어에 붙여줘.
-        String imagePath = fileStorageService.storeFile(image);
-        word.setImagePath(imagePath);
+        // 직접 업로드된 파일이 있으면 저장, 없으면 AI 생성 경로(imagePath) 사용
+        if (image != null && !image.isEmpty()) {
+            word.setImagePath(fileStorageService.storeFile(image));
+        } else if (request.imagePath() != null && !request.imagePath().isBlank()) {
+            word.setImagePath(request.imagePath());
+        }
 
         // 창고 관리인(Repository)에게 저장을 부탁해.
         Word savedWord = wordRepository.save(word);

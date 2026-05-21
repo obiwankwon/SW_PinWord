@@ -16,6 +16,8 @@ const AdminWords = () => {
   // 💡 [신규 추가] 업로드할 실제 이미지 파일 데이터와, 화면에 보여줄 미리보기 주소
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [generatedImagePath, setGeneratedImagePath] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   // =========================================================================
   // [단어 수정용 상태값들]
@@ -42,10 +44,33 @@ const AdminWords = () => {
   const handleChange = (e) => setNewWord({ ...newWord, [e.target.name]: e.target.value });
   const handleEditChange = (e) => setEditWord({ ...editWord, [e.target.name]: e.target.value });
 
+  // AI 이미지 생성 핸들러
+  const handleGenerateImage = async () => {
+    if (!newWord.englishSpelling.trim()) {
+      alert('영어 단어를 먼저 입력해주세요.');
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const response = await api.post('/admin/words/generate-image', {
+        englishWord: newWord.englishSpelling.trim()
+      });
+      const path = response.data.imagePath;
+      setGeneratedImagePath(path);
+      setImageFile(null);
+      setImagePreview(`${BACKEND_URL}${path}`);
+    } catch (error) {
+      alert('이미지 생성에 실패했습니다. 다시 시도해주세요.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
   // 💡 [신규 추가] 새 단어 추가 시 이미지 선택 핸들러
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImageFile(file); // 실제 파일 데이터 저장
+    setGeneratedImagePath(null); // 직접 업로드 시 AI 생성 경로 초기화
     
     // 파일을 읽어서 브라우저 화면에 미리보기로 띄워줍니다.
     if (file) {
@@ -84,7 +109,10 @@ const AdminWords = () => {
       
       // 2. 텍스트 데이터(word)를 JSON 형태로 포장해서 상자에 넣습니다.
       // (Spring Boot의 @RequestPart("word")가 이 데이터를 받아갑니다.)
-      formData.append('word', new Blob([JSON.stringify(newWord)], {
+      formData.append('word', new Blob([JSON.stringify({
+        ...newWord,
+        imagePath: generatedImagePath
+      })], {
         type: 'application/json'
       }));
 
@@ -103,6 +131,7 @@ const AdminWords = () => {
       setNewWord({ englishSpelling: '', meaning: '', partOfSpeech: '명사' });
       setImageFile(null);
       setImagePreview(null);
+      setGeneratedImagePath(null);
       
       fetchWords();
     } catch (error) {
@@ -183,9 +212,19 @@ const AdminWords = () => {
             <option value="부사">부사</option>
           </select>
           
-          {/* 💡 [신규 추가] 파일 선택 입력창과 미리보기 영역 */}
+          {/* 파일 직접 업로드 또는 AI 이미지 생성 */}
           <div className="image-upload-wrapper">
-            <input type="file" accept="image/*" onChange={handleImageChange} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <input type="file" accept="image/*" onChange={handleImageChange} />
+              <button
+                type="button"
+                onClick={handleGenerateImage}
+                disabled={isGenerating}
+                className="generate-image-btn"
+              >
+                {isGenerating ? '생성 중...' : '✨ AI 이미지 생성'}
+              </button>
+            </div>
             {imagePreview && (
               <div style={{ marginTop: '10px' }}>
                 <img src={imagePreview} alt="미리보기" style={{ maxWidth: '150px', borderRadius: '8px' }} />

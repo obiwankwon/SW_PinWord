@@ -13,8 +13,15 @@ public class WordDto {
     public record Request(
             String englishSpelling, // 영단어 스펠링 (엔티티 필드명 일치)
             String meaning,         // 한글 뜻
-            String partOfSpeech     // 품사 (예: 명사, 동사)
+            String partOfSpeech,    // 품사 (예: 명사, 동사)
+            String imagePath        // AI 생성 이미지 경로 (직접 업로드 대신 사용, 선택사항)
     ) {}
+
+    // AI 이미지 생성 요청 상자
+    public record GenerateImageRequest(String englishWord) {}
+
+    // AI 이미지 생성 응답 상자
+    public record GenerateImageResponse(String imagePath) {}
 
     // 2. 단어 처리 성공 시 백엔드에서 프론트엔드로 보내주는 응답 상자
     public record Response(

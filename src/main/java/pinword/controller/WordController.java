@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import pinword.dto.WordDto;
+import pinword.service.GeminiImageService;
 import pinword.service.WordService;
 import java.util.List;
 
@@ -18,8 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor // 3. 밑에 선언한 wordService를 자동으로 연결(주입)해 줍니다.
 public class WordController {
 
-    // 우리가 만든 '단어 요리사(Service)'를 불러옵니다. 실제 일은 이 친구가 다 합니다.
     private final WordService wordService;
+    private final GeminiImageService geminiImageService;
 
     // =========================================================================
     // [누구나 사용 가능한 기능: 조회]
@@ -51,6 +52,20 @@ public class WordController {
     // [관리자(ADMIN)만 사용 가능한 기능: 관리]
     // 주소에 /admin이 포함되어 SecurityConfig에서 관리자만 통과하도록 감시합니다.
     // =========================================================================
+
+    /**
+     * AI 이미지 생성 (POST http://localhost:8080/api/admin/words/generate-image)
+     * 단어를 받아 Gemini로 이미지를 생성하고, uploads/에 저장 후 경로를 반환합니다.
+     */
+    @PostMapping("/admin/words/generate-image")
+    public ResponseEntity<?> generateWordImage(@RequestBody WordDto.GenerateImageRequest request) {
+        try {
+            String imagePath = geminiImageService.generateAndSaveImage(request.englishWord());
+            return ResponseEntity.ok(new WordDto.GenerateImageResponse(imagePath));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("이미지 생성 실패: " + e.getMessage());
+        }
+    }
 
     /**
      * 💡 새 단어 추가하기 (POST http://localhost:8080/api/admin/words)

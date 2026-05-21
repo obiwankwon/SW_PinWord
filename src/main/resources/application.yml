@@ -18,7 +18,7 @@ spring:
     # 🚨 [DB 비밀번호 - 팀원별 수정 필요!]
     # 현재 적힌 비밀번호는 최초 작성자의 로컬 비밀번호입니다.
     # 다른 팀원들은 각자 본인 PC에 MySQL을 설치할 때 설정했던 비밀번호로 꼭 변경한 뒤 실행해 주세요!
-    password: 112233
+    password: "0211"
 
   jpa:
     # 4. [DB 방언 설정] 스프링(JPA)에게 "우리는 MySQL을 쓸 거니까 MySQL 문법(방언)으로 쿼리를 작성해!"라고 강제 지정합니다.
@@ -44,3 +44,6 @@ jwt:
   # 토큰 암호화에 사용되는 비밀번호입니다. 
   # 최소 32자 이상의 임의의 문자열을 권장합니다.
   secret: my-super-secret-key-for-pinword-project-needs-to-be-long-enough-for-security
+
+gemini:
+  api-key: AIzaSyBLUSIqrrtN8IfNY6hAalD8DmA7l9wXDhc
