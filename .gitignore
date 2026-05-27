@@ -1,0 +1,24 @@
+# ===== Java / Spring Boot =====
+build/
+.gradle/
+*.class
+*.jar
+*.war
+out/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# 환경변수 (절대 커밋 금지!)
+.env
+.env.local
+*.env
+
+# 업로드 파일 (로컬 생성 파일)
+uploads/
+
+# OS
+.DS_Store
+Thumbs.db

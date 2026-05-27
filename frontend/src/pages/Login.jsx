@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import api from '../api/axiosConfig';
 import './Login.css';
 
-const BACKEND_URL = 'http://localhost:8080';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
 
 // 콜라주에 쓸 이미지 9장
 const COLLAGE_IMAGES = [

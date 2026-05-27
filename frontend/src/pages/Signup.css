@@ -1,67 +1,10 @@
+/* Signup은 Login CSS 클래스 공유 */
 .signup-page {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-}
-
-.signup-card {
-  background: #ffffff;
-  padding: 48px 40px;
-  border-radius: 16px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  width: 100%;
-  max-width: 400px;
-}
-
-.signup-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 28px;
-  text-align: center;
-}
-
-.signup-form {
+  background: #fff;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-}
-
-.signup-form input {
-  padding: 14px 16px;
-  border: 2px solid #e8ecef;
-  border-radius: 10px;
-  font-size: 15px;
-  transition: border-color 0.2s;
-  outline: none;
-}
-
-.signup-form input:focus {
-  border-color: #3498db;
-}
-
-.signup-btn {
-  padding: 14px;
-  background: linear-gradient(135deg, #2ecc71, #27ae60);
-  color: #ffffff;
-  border: none;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: 700;
-  margin-top: 8px;
-  transition: opacity 0.2s, transform 0.1s;
-}
-
-.signup-btn:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-.signup-footer {
-  margin-top: 24px;
-  font-size: 14px;
-  color: #7f8c8d;
-  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+  overflow: hidden;
 }

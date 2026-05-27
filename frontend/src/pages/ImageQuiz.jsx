@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../api/axiosConfig';
 import './Quiz.css'; // 💡 기존 스타일을 그대로 사용합니다.
 
-const BACKEND_URL = 'http://localhost:8080';
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
 
 const ImageQuiz = () => {
   const [quizData, setQuizData] = useState(null);

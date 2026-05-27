@@ -1,176 +1,179 @@
-#   Git Convention
+# 📌 PinWord — 핀터레스트 스타일 영단어 학습 플랫폼
+
+> 이미지 기반 영단어 학습 + AI 이미지 자동 생성 + 퀴즈까지, 핀터레스트 감성으로
+
+---
+
+## ✨ 주요 기능
+
+| 기능 | 설명 |
+|------|------|
+| 📖 **단어 학습** | 전체 단어를 Pinterest Masonry 카드 형태로 학습 |
+| 🖼️ **이미지 학습** | 이미지 카드를 클릭하면 3D 플립 애니메이션으로 단어·뜻 확인 |
+| 🤖 **AI 이미지 생성** | 단어 입력 시 Pollinations.ai API로 이미지 자동 생성 |
+| 📝 **단어 퀴즈** | 4지선다 단어 뜻 맞추기 퀴즈 + 점수 기록 |
+| 🎨 **이미지 퀴즈** | 이미지를 보고 영단어 맞추기 |
+| 👑 **관리자 패널** | 단어 추가/수정/삭제, 이미지 업로드, AI 이미지 생성 |
+| 📊 **마이페이지** | 퀴즈 누적 횟수·평균 점수·최근 5회 추이 그래프 |
+| 🔐 **JWT 인증** | 로그인/회원가입, ADMIN/USER 역할 기반 접근 제어 |
+
+---
+
+## 🛠️ 기술 스택
+
+### Backend
+- **Java 25** + **Spring Boot 4.0.6**
+- **Spring Security** + **JWT** (JJWT)
+- **Spring Data JPA** + **Hibernate**
+- **MySQL** (로컬 / Aiven Cloud)
+- **Pollinations.ai** — 무료 AI 이미지 생성 API
+
+### Frontend
+- **React 19** + **Vite**
+- **React Router v7**
+- **Axios**
+- **Recharts** (통계 그래프)
+- **CSS (Pinterest Masonry, 3D Flip Card)**
+
+---
+
+## 📂 프로젝트 구조
+
+```
+SW_PinWord/
+├── src/main/java/pinword/
+│   ├── controller/      # REST API 엔드포인트
+│   ├── service/         # 비즈니스 로직
+│   ├── repository/      # JPA 인터페이스
+│   ├── entity/          # DB 테이블 매핑
+│   ├── dto/             # 요청/응답 데이터 객체
+│   └── security/        # JWT 필터, 유틸, Security 설정
+├── src/main/resources/
+│   ├── application.yml  # 환경변수 기반 설정
+│   └── default-images/  # 기본 단어 이미지
+├── uploads/             # AI 생성 및 업로드 이미지 저장 (로컬)
+└── frontend/
+    ├── src/
+    │   ├── api/         # Axios 설정
+    │   ├── pages/       # 각 페이지 컴포넌트 + CSS
+    │   └── App.jsx      # 라우팅 + 네비게이션
+    ├── .env.example     # 환경변수 예시
+    └── netlify.toml     # Netlify 배포 설정
+```
+
+---
+
+## ⚙️ 로컬 개발 환경 설정
+
+### 사전 요구사항
+- Java 25+
+- Node.js 18+
+- MySQL 8.0+
+
+### 1. 저장소 클론
+```bash
+git clone https://github.com/obiwankwon/SW_PinWord.git
+cd SW_PinWord
+git checkout develop
+```
+
+### 2. MySQL DB 생성
+```sql
+CREATE DATABASE pinword CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 3. 백엔드 환경변수 설정
+`src/main/resources/application.yml`에서 DB 비밀번호 수정:
+```yaml
+password: ${DB_PASSWORD:여기에_본인_MySQL_비밀번호}
+```
+또는 환경변수로 설정:
+```bash
+set DB_PASSWORD=본인비밀번호   # Windows
+export DB_PASSWORD=본인비밀번호 # Mac/Linux
+```
+
+### 4. 백엔드 실행
+```bash
+./gradlew bootRun
+# 서버: http://localhost:8080
+```
+
+### 5. 프론트엔드 환경변수 설정
+```bash
+cd frontend
+cp .env.example .env.local
+# .env.local 내용 (기본값 그대로 사용 가능)
+```
 
+### 6. 프론트엔드 실행
+```bash
+npm install
+npm run dev
+# 앱: http://localhost:5173
+```
 
-##   1. 커밋 메시지 구조
+### 기본 관리자 계정
+서버 최초 실행 시 `admins.csv`에서 자동 생성됩니다.
 
+---
 
-Type: Subject
+## 🌐 배포 구조
 
-[Body]  -> (생략 가능)
+```
+Netlify (프론트)  ──→  Render (Spring Boot)  ──→  Aiven (MySQL)
+     React               8080 포트                 Cloud DB
+```
 
-[Footer]  ->  (생략 가능)
+### Render (백엔드) 환경변수
+| 변수명 | 설명 |
+|--------|------|
+| `DB_URL` | Aiven MySQL JDBC URL |
+| `DB_USERNAME` | DB 사용자명 |
+| `DB_PASSWORD` | DB 비밀번호 |
+| `JWT_SECRET` | JWT 서명 키 (32자 이상) |
 
+### Netlify (프론트엔드) 환경변수
+| 변수명 | 설명 |
+|--------|------|
+| `VITE_BACKEND_URL` | Render 백엔드 URL (예: `https://pinword.onrender.com`) |
+| `VITE_API_BASE_URL` | `https://pinword.onrender.com/api` |
 
-***
+---
 
+## 🤖 AI 이미지 생성 흐름
 
-##   2. Type (태그)  
+```
+관리자 [AI 이미지 생성 버튼 클릭]
+    → POST /api/admin/words/generate-image { englishWord: "apple" }
+    → GeminiImageService.generateAndSaveImage("apple")
+    → GET https://image.pollinations.ai/prompt/Generate+an+image+of+"apple"...
+    → 이미지 바이트 수신 → uploads/ai_apple.png 저장
+    → /uploads/ai_apple.png 경로 반환
+    → 단어 등록 시 해당 경로 자동 연결
+```
 
+---
 
-Feat: 새로운 기능 추가
+## 📋 Git 브랜치 전략
 
-Fix:  버그 수정
+```
+main        ← 최종 릴리즈
+  └── develop  ← 통합 개발
+        └── feature/*  ← 기능 단위 개발
+```
 
-Design:  CSS 등 사용자 UI 디자인 변경
+- `main` / `develop` 직접 커밋 금지 → Pull Request 필수
+- `feature/` 브랜치에서 자유롭게 작업 후 PR
 
-Docs:  "문서 수정 (README, Wiki 등)"
+---
 
-Refactor:  코드 리팩토링 (기능 변경 없는 코드 개선)
+## 👥 팀원
 
-Style:  "코드 포맷팅, 세미콜론 누락 수정 (로직 변경 없음)"
+상명대학교 스마트정보통신공학과 SW 프로젝트
 
-Test:  테스트 코드 추가 및 수정
+---
 
-Chore:  "빌드 업무 수정, 패키지 관리, .gitignore 수정 등 잡무"
+## 📄 라이선스
 
-Rename: 파일명, 폴더명만 수정한 경우
-
-Remove: 파일을 삭제만 한 경우
-
-
-***
-
-
-##   3. 작성 규칙 (Rules)
-
-제목(Subject): 50자 이내로 작성하며, 마지막에 마침표(.)를 찍지 않습니다.
-
-본문(Body): '무엇을', '왜' 했는지에 대해 자세한 설명이 필요한 경우 작성합니다. (선택 사항)
-
-언어: 한글을 사용하여 명확하게 의도를 전달합니다.
-
-단위: 하나의 커밋에는 가급적 하나의 수정 사항만 담습니다.
-
-
-***
-
-
-##   4. 실제 예시 (Examples) -> Type: Subject 예시
-   
-Feat: 로그인 페이지 이메일 유효성 검사 로직 추가
-
-Design: 메인 페이지 네비게이션 바 색상 변경 (#상명블루)
-
-Fix: 데이터 로딩 시 발생하는 널 포인트 예외 해결
-
-Docs: 설치 방법 및 환경 변수 설정 가이드 업데이트
-
-
-***
-
-
-## 5. 깃 커밋 규칙
-
-Main에 직접 커밋 금지 -> 무조건 PullRequest
-
-Develop에 직접 커밋 금지 -> 무조건 PullRequest
-
-feature에 자유롭게 커밋 가능 
-
-
-***
-
-
-# 패키지 구조 + 개발 흐름
-
-
-## 1. 📂 Controller (웹 계층)
-   
-역할: 사용자의 요청(Request)을 가장 먼저 받고, 결과(Response)를 돌려주는 문의창구
-
-담는 코드:
-
-URL 매핑 (@GetMapping, @PostMapping 등)
-
-사용자가 보낸 파라미터 검증
-
-어떤 서비스(Service)를 호출할지 결정
-
-비유: 주문을 받고 서빙하는 홀 웨이터
-
-
-***
-
-
-## 2. 📂 Service (비즈니스 로직 계층)
-   
-역할: 프로젝트의 핵심 기능이 실제로 구현되는 두뇌
-
-담는 코드:
-
-실제 업무 로직 (예: 비밀번호 암호화, 점수 계산, 단어장 생성 로직)
-
-트랜잭션 관리 (@Transactional)
-
-여러 리포지토리를 조합하여 필요한 데이터를 가공
-
-비유: 주문받은 음식을 실제로 요리하는 주방장
-
-
-***
-
-
-## 3. 📂 Repository (데이터 액세스 계층)
-   
-역할: 데이터베이스(DB)와 직접 대화하며 데이터를 넣고 빼는 창고 관리자
-
-담는 코드:
-
-DB 쿼리 실행 (JPA 인터페이스)
-
-데이터 조회, 저장, 수정, 삭제 로직 (CRUD)
-
-비유: 식재료 창고에서 필요한 재료를 꺼내오거나 새로 들어온 재료를 정리하는 창고지기
-
-
-***
-
-
-## 4. 📂 Entity (도메인 모델 계층)
-   
-역할: 데이터베이스의 테이블과 1:1로 매칭되는 데이터의 원본
-
-담는 코드:
-
-DB 테이블 구조 정의 (@Entity, @Column, @Id)
-
-테이블 간의 연관 관계 설정 (@ManyToOne, @OneToMany)
-
-비유: 창고에 저장되는 식재료의 규격과 종류
-
-
-***
-
-
-## 5. 📂 DTO (Data Transfer Object)
-   
-역할: 각 계층(Controller ↔ Service) 사이에서 데이터를 실어 나르는 택배 상자
-
-담는 코드:
-
-화면에 보여줄 데이터만 모아둔 클래스
-
-사용자로부터 입력받을 데이터만 모아둔 클래스
-
-주의: Entity를 직접 화면에 노출하지 않기 위해 반드시 사용
-
-비유: 음식을 배달할 때 쓰는 일회용 배달 용기 (식재료 원본을 그대로 보내지 않는 것과 같음)
-
-
-***
-
-
-🔄 데이터의 흐름 (Flow)
-사용자 요청 ➔ Controller ➔ Service ➔ Repository ➔ DB ➔ 다시 역순으로 응답
-
-새로운 기능을 만들 때는 Entity ➔ Repository ➔ Service ➔ DTO ➔ Controller 순서로 코드를 짜는게 효율적
+MIT License
