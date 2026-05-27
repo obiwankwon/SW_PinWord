@@ -27,7 +27,7 @@ const ImageLearning = () => {
   return (
     <div className="image-learning-page">
       <p className="il-subtitle">카드를 클릭하면 단어와 뜻이 보입니다 ✨</p>
-      <p className="il-count">이미지 단어 {words.length}개</p>
+      <p className="il-count">단어 총 {words.length}개</p>
 
       <div className="masonry-grid">
         {words.map((word) => (
