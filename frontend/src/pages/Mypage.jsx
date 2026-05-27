@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import api from '../api/axiosConfig';
 import './Mypage.css';
@@ -11,15 +10,8 @@ const Mypage = () => {
   const [stats, setStats] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        setUserEmail(decoded.sub);
-      } catch (error) {
-        console.error('토큰 해독 실패:', error);
-      }
-    }
+    const email = localStorage.getItem('userEmail');
+    if (email) setUserEmail(email);
 
     const fetchStats = async () => {
       try {
@@ -34,6 +26,7 @@ const Mypage = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userEmail');
     alert('안전하게 로그아웃 되었습니다. 👋');
     navigate('/');
   };
