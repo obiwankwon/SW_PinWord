@@ -1,181 +1,308 @@
-.admin-words-title {
-  font-size: 24px;
-  font-weight: 700;
-  color: #c0392b;
-  margin-bottom: 24px;
+/* ===== PinWord — Pinterest Mobile Style ===== */
+
+/* --- 로고 헤더 --- */
+.pinword-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px 0 18px;
+  border-bottom: 1px solid #efefef;
+  margin-bottom: 20px;
 }
 
+.pinword-logo-icon {
+  width: 38px;
+  height: 38px;
+  background: #e60023;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: -1px;
+  box-shadow: 0 2px 8px rgba(230, 0, 35, 0.35);
+}
+
+.pinword-logo-text {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.5px;
+}
+
+/* 기존 타이틀 숨김 */
+.admin-words-title {
+  display: none;
+}
+
+/* --- 단어 추가 섹션 --- */
 .add-word-section {
-  background: #fff5f5;
-  border: 1px solid #fad7d7;
-  padding: 24px;
-  border-radius: 12px;
-  margin-bottom: 24px;
+  background: #fff;
+  border: none;
+  padding: 0 16px 24px;
+  margin-bottom: 4px;
 }
 
 .add-word-section h3 {
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 700;
-  color: #2c3e50;
+  color: #111;
   margin-bottom: 16px;
 }
 
 .add-word-form {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .add-word-form input,
 .add-word-form select {
-  padding: 10px 14px;
-  border: 2px solid #e8ecef;
-  border-radius: 8px;
-  font-size: 14px;
+  padding: 14px 16px;
+  border: 2px solid #efefef;
+  border-radius: 16px;
+  font-size: 15px;
   outline: none;
-  transition: border-color 0.2s;
-  flex: 1;
-  min-width: 120px;
+  background: #f8f8f8;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, background 0.2s;
+  flex: unset;
+  min-width: unset;
 }
 
 .add-word-form input:focus,
 .add-word-form select:focus {
-  border-color: #c0392b;
+  border-color: #e60023;
+  background: #fff;
 }
 
-.add-word-btn {
-  padding: 10px 20px;
-  background: #c0392b;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 14px;
-  white-space: nowrap;
-  transition: opacity 0.2s;
-}
-
-.add-word-btn:hover {
-  opacity: 0.85;
-}
-
-.word-list {
+/* --- 이미지 업로드 --- */
+.image-upload-wrapper {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.word-item {
-  background: #ffffff;
-  border: 1px solid #e8ecef;
-  border-radius: 10px;
-  padding: 14px 18px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+.image-upload-wrapper input[type="file"] {
+  font-size: 13px;
+  color: #767676;
+  padding: 12px 14px;
+  border: 2px dashed #ddd;
+  border-radius: 16px;
+  background: #fafafa;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
 }
 
+/* --- AI 이미지 생성 버튼 --- */
+.generate-image-btn {
+  padding: 14px;
+  background: #e60023;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 15px;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: 0.2px;
+}
+
+.generate-image-btn:hover {
+  background: #ad081b;
+}
+
+.generate-image-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* --- 추가 버튼 --- */
+.add-word-btn {
+  padding: 14px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 15px;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.add-word-btn:hover {
+  background: #333;
+}
+
+/* --- 단어 목록 — Pinterest 2컬럼 그리드 --- */
+.word-list {
+  columns: 2;
+  column-gap: 10px;
+  padding: 0 12px 24px;
+}
+
+.word-item {
+  break-inside: avoid;
+  margin-bottom: 10px;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: none;
+  padding: 0;
+}
+
+/* --- 카드 이미지 --- */
+.word-card-image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  background: #f0f0f0;
+}
+
+.word-card-no-image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(135deg, #f8f8f8, #efefef);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: #ccc;
+}
+
+/* --- 카드 정보 --- */
 .word-item-view {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+}
+
+.word-item-info {
+  padding: 8px 10px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .word-item-info strong {
-  font-size: 18px;
-  color: #2c3e50;
-  margin-right: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111;
 }
 
 .word-item-info span {
-  font-size: 14px;
-  color: #7f8c8d;
+  font-size: 12px;
+  color: #767676;
 }
 
 .word-item-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
+  padding: 6px 10px 10px;
 }
 
+/* --- 수정/삭제 버튼 --- */
 .edit-btn {
-  padding: 6px 14px;
-  background: #f39c12;
-  color: #ffffff;
+  flex: 1;
+  padding: 7px 0;
+  background: #f0f0f0;
+  color: #111;
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: 700;
-  transition: opacity 0.2s;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .edit-btn:hover {
-  opacity: 0.85;
+  background: #e0e0e0;
 }
 
 .delete-btn {
-  padding: 6px 14px;
-  background: #7f8c8d;
-  color: #ffffff;
+  flex: 1;
+  padding: 7px 0;
+  background: #fff0f1;
+  color: #e60023;
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: 700;
-  transition: opacity 0.2s;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .delete-btn:hover {
-  opacity: 0.85;
+  background: #ffd6d9;
 }
 
+/* --- 수정 모드 --- */
 .word-item-edit {
   display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  align-items: unset;
+  flex-wrap: unset;
 }
 
 .word-item-edit input,
 .word-item-edit select {
-  padding: 8px 12px;
-  border: 2px solid #e8ecef;
-  border-radius: 8px;
+  padding: 10px 14px;
+  border: 2px solid #efefef;
+  border-radius: 12px;
   font-size: 14px;
   outline: none;
-  flex: 1;
-  min-width: 100px;
+  background: #f8f8f8;
   transition: border-color 0.2s;
+  flex: unset;
+  min-width: unset;
 }
 
 .word-item-edit input:focus,
 .word-item-edit select:focus {
-  border-color: #27ae60;
+  border-color: #e60023;
+  background: #fff;
 }
 
 .save-btn {
-  padding: 7px 14px;
-  background: #27ae60;
-  color: #ffffff;
+  padding: 10px;
+  background: #e60023;
+  color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
   font-size: 13px;
   font-weight: 700;
-  transition: opacity 0.2s;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .save-btn:hover {
-  opacity: 0.85;
+  background: #ad081b;
 }
 
 .cancel-btn {
-  padding: 7px 14px;
-  background: #95a5a6;
-  color: #ffffff;
+  padding: 10px;
+  background: #f0f0f0;
+  color: #111;
   border: none;
-  border-radius: 6px;
+  border-radius: 20px;
   font-size: 13px;
   font-weight: 700;
-  transition: opacity 0.2s;
+  cursor: pointer;
+  transition: background 0.2s;
 }
 
 .cancel-btn:hover {
-  opacity: 0.85;
+  background: #e0e0e0;
 }

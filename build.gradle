@@ -54,8 +54,11 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'   // 실제 작동 로직 (실행 시에만 필요)
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // 내부 데이터를 자바 객체로 변환해 주는 도구
 
+	// 7. [JSON 파싱] Gemini API 응답을 파싱하기 위해 Jackson을 명시적으로 추가합니다.
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
 	// =========================================================================
-	// 7. [테스트 환경] 아래는 모두 '테스트 코드'를 작성하고 실행할 때만 사용되는 도구들입니다.
+	// 8. [테스트 환경] 아래는 모두 '테스트 코드'를 작성하고 실행할 때만 사용되는 도구들입니다.
 	// =========================================================================
 	testImplementation 'org.springframework.boot:spring-boot-starter-data-jpa-test' // DB(JPA) 관련 테스트 도우미
 	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test' // 웹 API(컨트롤러) 테스트 도우미

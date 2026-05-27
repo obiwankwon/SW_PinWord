@@ -1,64 +1,77 @@
+/* ===== PinWord Quiz — Pinterest Red Style ===== */
+
 .quiz-loading {
   text-align: center;
   margin-top: 80px;
   font-size: 18px;
-  color: #7f8c8d;
+  color: #767676;
 }
 
+/* --- 결과 화면 --- */
 .quiz-result {
   text-align: center;
-  background: #ffffff;
-  border-radius: 16px;
+  background: #fff;
+  border-radius: 24px;
   padding: 48px 32px;
   max-width: 420px;
   margin: 60px auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 24px rgba(230, 0, 35, 0.12);
+  border-top: 4px solid #e60023;
 }
 
 .quiz-result h2 {
-  font-size: 28px;
+  font-size: 26px;
+  font-weight: 800;
+  color: #111;
   margin-bottom: 16px;
 }
 
 .quiz-result-score {
-  font-size: 36px;
-  font-weight: 700;
-  color: #27ae60;
+  font-size: 34px;
+  font-weight: 900;
+  color: #e60023;
   margin: 20px 0;
 }
 
 .quiz-retry-btn {
-  padding: 14px 32px;
+  padding: 14px 36px;
   font-size: 16px;
-  background: #2c3e50;
+  background: #e60023;
   color: #fff;
   border: none;
-  border-radius: 10px;
+  border-radius: 999px;
   font-weight: 700;
-  transition: opacity 0.2s;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 14px rgba(230, 0, 35, 0.3);
 }
 
 .quiz-retry-btn:hover {
-  opacity: 0.85;
+  opacity: 0.88;
+  transform: translateY(-1px);
 }
 
+/* --- 퀴즈 페이지 --- */
 .quiz-page {
   max-width: 480px;
   margin: 0 auto;
   text-align: center;
+  padding: 24px 16px 40px;
 }
 
 .quiz-progress {
-  font-size: 15px;
-  color: #95a5a6;
-  font-weight: 500;
+  font-size: 13px;
+  color: #767676;
+  font-weight: 600;
   margin-bottom: 8px;
+  letter-spacing: 0.3px;
 }
 
+/* 진행바 */
 .quiz-progress-bar-wrap {
   width: 100%;
   height: 6px;
-  background: #e8ecef;
+  background: #f0f0f0;
   border-radius: 99px;
   margin-bottom: 32px;
   overflow: hidden;
@@ -66,75 +79,91 @@
 
 .quiz-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #3498db, #2ecc71);
+  background: linear-gradient(90deg, #e60023, #ff6b6b);
   border-radius: 99px;
-  transition: width 0.3s;
+  transition: width 0.4s ease;
 }
 
+/* 단어 표시 */
 .quiz-word {
-  font-size: 56px;
-  font-weight: 700;
-  color: #2c3e50;
+  font-size: 52px;
+  font-weight: 900;
+  color: #111;
   margin-bottom: 8px;
+  letter-spacing: -1px;
+  line-height: 1.1;
 }
 
 .quiz-question-label {
-  color: #7f8c8d;
-  margin-bottom: 32px;
+  color: #767676;
+  margin-bottom: 28px;
   font-size: 15px;
 }
 
+/* 선택지 */
 .quiz-options {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 28px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .quiz-option-btn {
-  padding: 18px 20px;
-  font-size: 17px;
-  border-radius: 12px;
-  border: 2px solid #e8ecef;
-  background: #ffffff;
-  color: #2c3e50;
-  font-weight: 500;
+  padding: 16px 20px;
+  font-size: 16px;
+  border-radius: 16px;
+  border: 2px solid #efefef;
+  background: #fff;
+  color: #111;
+  font-weight: 600;
   text-align: left;
-  transition: border-color 0.15s, background 0.15s;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
   width: 100%;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
 }
 
 .quiz-option-btn:hover:not(:disabled) {
-  border-color: #3498db;
-  background: #eaf4fd;
+  border-color: #e60023;
+  background: #fff5f5;
+  transform: translateX(3px);
 }
 
+/* 정답 */
 .quiz-option-btn.correct {
-  background: #2ecc71;
+  background: #e60023;
   color: #fff;
-  border-color: #27ae60;
+  border-color: #e60023;
+  box-shadow: 0 4px 14px rgba(230, 0, 35, 0.3);
 }
 
+/* 오답 */
 .quiz-option-btn.wrong {
-  background: #e74c3c;
-  color: #fff;
-  border-color: #c0392b;
+  background: #fff0f0;
+  color: #e60023;
+  border-color: #e60023;
+  text-decoration: line-through;
 }
 
+/* 나머지 */
 .quiz-option-btn.dimmed {
   opacity: 0.35;
 }
 
+/* 다음 버튼 */
 .quiz-next-btn {
   width: 100%;
   padding: 16px;
-  font-size: 17px;
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  font-size: 16px;
+  background: #e60023;
   color: #fff;
   border: none;
-  border-radius: 12px;
-  font-weight: 700;
+  border-radius: 999px;
+  font-weight: 800;
+  cursor: pointer;
   transition: opacity 0.2s, transform 0.1s;
+  box-shadow: 0 4px 16px rgba(230, 0, 35, 0.3);
+  letter-spacing: -0.2px;
 }
 
 .quiz-next-btn:hover {

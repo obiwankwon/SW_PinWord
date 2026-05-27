@@ -4,6 +4,21 @@ import { jwtDecode } from 'jwt-decode';
 import api from '../api/axiosConfig';
 import './Login.css';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+
+// 콜라주에 쓸 이미지 9장
+const COLLAGE_IMAGES = [
+  '/default-images/apple.png',
+  '/default-images/ambitious.jpg',
+  '/default-images/beautiful.png',
+  '/default-images/achieve.jpg',
+  '/default-images/banana.png',
+  '/default-images/challenge.png',
+  '/default-images/accomplish.jpg',
+  '/default-images/carefully.jpg',
+  '/default-images/absolutely.png',
+];
+
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
@@ -18,15 +33,11 @@ const Login = () => {
       const response = await api.post('/auth/login', formData);
       const token = response.data.token;
       localStorage.setItem('token', token);
-
+      localStorage.setItem('userEmail', formData.email);
       const decoded = jwtDecode(token);
-      const userRole = decoded.role;
-
-      if (userRole === 'ROLE_ADMIN') {
-        alert('관리자님 환영합니다!');
+      if (decoded.role === 'ROLE_ADMIN') {
         navigate('/admin/words');
       } else {
-        alert('유저님 환영합니다!');
         navigate('/learning');
       }
     } catch (error) {
@@ -36,17 +47,45 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      <div className="login-card">
-        <div className="login-logo">📚</div>
-        <h1 className="login-title">PinWord</h1>
-        <p className="login-subtitle">단어 학습의 모든 것</p>
+
+      {/* 상단 이미지 콜라주 */}
+      <div className="login-collage">
+        {[0, 1, 2].map((col) => (
+          <div key={col} className={`collage-col collage-col-${col}`}>
+            {COLLAGE_IMAGES.slice(col * 3, col * 3 + 3).map((src, i) => (
+              <img
+                key={i}
+                src={`${BACKEND_URL}${src}`}
+                alt=""
+                className="collage-img"
+              />
+            ))}
+          </div>
+        ))}
+        <div className="collage-gradient" />
+      </div>
+
+      {/* 로고 + 폼 */}
+      <div className="login-content">
+        <div className="pinword-logo-wrap">
+          <div className="pinword-logo-circle">P</div>
+        </div>
+        <h1 className="login-tagline">단어 학습의 모든 것을<br />핀워드에서</h1>
+
         <form onSubmit={handleSubmit} className="login-form">
-          <input name="email" type="email" placeholder="이메일" onChange={handleChange} required />
-          <input name="password" type="password" placeholder="비밀번호" onChange={handleChange} required />
-          <button type="submit" className="login-btn">로그인</button>
+          <input name="email" type="email" placeholder="이메일 주소" onChange={handleChange} required />
+          <button type="submit" className="login-btn">계속하기</button>
         </form>
+
+        <div className="login-divider"><span>또는</span></div>
+
+        <form onSubmit={handleSubmit} className="login-form">
+          <input name="password" type="password" placeholder="비밀번호" onChange={handleChange} required />
+          <button type="submit" className="login-btn-outline">로그인</button>
+        </form>
+
         <div className="login-footer">
-          <Link to="/signup">아직 계정이 없으신가요? 회원가입</Link>
+          <Link to="/signup">아직 계정이 없으신가요? <strong>회원가입</strong></Link>
         </div>
       </div>
     </div>

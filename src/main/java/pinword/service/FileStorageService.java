@@ -27,6 +27,33 @@ public class FileStorageService {
     }
 
     /**
+     * AI가 생성한 이미지 바이트 배열을 받아서 저장하고, 그 파일의 웹 주소를 알려줍니다. (UUID 포함)
+     */
+    public String storeFileFromBytes(byte[] bytes, String fileName) {
+        try {
+            String uniqueFileName = UUID.randomUUID().toString() + "_" + fileName;
+            Path targetLocation = this.fileStorageLocation.resolve(uniqueFileName);
+            Files.write(targetLocation, bytes);
+            return "/uploads/" + uniqueFileName;
+        } catch (IOException ex) {
+            throw new RuntimeException("AI 이미지 저장 실패: " + fileName, ex);
+        }
+    }
+
+    /**
+     * AI 생성 이미지를 UUID 없이 파일명 그대로 저장합니다.
+     */
+    public String storeFileFromBytesNoUUID(byte[] bytes, String fileName) {
+        try {
+            Path targetLocation = this.fileStorageLocation.resolve(fileName);
+            Files.write(targetLocation, bytes, java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.TRUNCATE_EXISTING);
+            return "/uploads/" + fileName;
+        } catch (IOException ex) {
+            throw new RuntimeException("AI 이미지 저장 실패: " + fileName, ex);
+        }
+    }
+
+    /**
      * 프론트에서 넘어온 이미지 파일을 받아서 저장하고, 그 파일의 웹 주소를 알려줍니다.
      */
     public String storeFile(MultipartFile file) {
