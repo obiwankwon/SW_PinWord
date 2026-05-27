@@ -19,10 +19,6 @@ const Learning = () => {
 
   return (
     <div className="learning-page">
-      <div className="il-header">
-        <div className="pinword-logo-circle">P</div>
-        <span className="pinword-logo-text">PinWord</span>
-      </div>
       <p className="il-subtitle">오늘의 단어를 학습하세요 📖</p>
       <p className="il-count">총 {words.length}개의 단어</p>
 

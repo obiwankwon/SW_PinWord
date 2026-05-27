@@ -1,58 +1,156 @@
-.user-nav {
-  background: #ffffff;
-  padding: 0 24px;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  border-bottom: 2px solid #3498db;
-  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.1);
+/* ===== PinWord Global Nav — Pinterest Style ===== */
+
+* { box-sizing: border-box; }
+
+.layout-root {
+  min-height: 100vh;
+  background: #fff;
 }
 
-.user-nav a {
-  padding: 16px 12px;
-  font-weight: 500;
-  color: #7f8c8d;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
-}
-
-.user-nav a:hover {
-  color: #3498db;
-  text-decoration: none;
-  border-bottom-color: #3498db;
-}
-
-.user-layout-content {
-  padding: 32px 24px;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
+/* ─────────────────────────────────────────
+   공통 NAV 뼈대
+───────────────────────────────────────── */
+.user-nav,
 .admin-nav {
-  background: #2c3e50;
-  padding: 0 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
   display: flex;
-  gap: 8px;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  gap: 0;
+  padding: 0 24px;
+  height: 60px;
+  border-bottom: 2px solid #e60023;
+  box-shadow: 0 2px 12px rgba(230, 0, 35, 0.08);
 }
 
-.admin-nav a {
-  padding: 16px 12px;
-  font-weight: 500;
-  color: #bdc3c7;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
-}
-
-.admin-nav a:hover {
-  color: #e74c3c;
+/* ─────────────────────────────────────────
+   로고 영역
+───────────────────────────────────────── */
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 28px;
+  flex-shrink: 0;
   text-decoration: none;
-  border-bottom-color: #e74c3c;
 }
 
-.admin-layout-content {
-  padding: 32px 24px;
-  max-width: 900px;
+.nav-logo-circle {
+  width: 34px;
+  height: 34px;
+  background: #e60023;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  font-weight: 900;
+  font-style: italic;
+  box-shadow: 0 2px 8px rgba(230, 0, 35, 0.4);
+  flex-shrink: 0;
+}
+
+.nav-logo-text {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.5px;
+}
+
+.nav-admin-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: #fff;
+  background: #e60023;
+  border-radius: 999px;
+  padding: 2px 8px;
+  letter-spacing: 0.8px;
+  margin-left: 2px;
+}
+
+/* ─────────────────────────────────────────
+   링크 그룹
+───────────────────────────────────────── */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+/* 기본 링크 */
+.nav-link {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background: #fff0f0;
+  color: #e60023;
+  text-decoration: none;
+}
+
+/* 현재 페이지 — 빨간 pill */
+.nav-link.active {
+  background: #e60023;
+  color: #fff !important;
+  box-shadow: 0 2px 10px rgba(230, 0, 35, 0.3);
+}
+
+.nav-link.active:hover {
+  background: #c0001d;
+  color: #fff;
+}
+
+/* ─────────────────────────────────────────
+   콘텐츠 영역
+───────────────────────────────────────── */
+.layout-content {
+  padding: 28px 20px 48px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+/* ─────────────────────────────────────────
+   반응형 — 작은 화면
+───────────────────────────────────────── */
+@media (max-width: 640px) {
+  .user-nav,
+  .admin-nav {
+    padding: 0 12px;
+    height: auto;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    gap: 6px;
+  }
+
+  .nav-logo {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .nav-link {
+    font-size: 13px;
+    padding: 6px 12px;
+  }
+
+  .layout-content {
+    padding: 16px 12px 40px;
+  }
 }
