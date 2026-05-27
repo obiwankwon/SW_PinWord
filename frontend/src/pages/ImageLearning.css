@@ -1,114 +1,186 @@
-/* 전체 페이지 여백 설정 */
+/* ===== PinWord ImageLearning — Pinterest Masonry + Flip Card ===== */
+
 .image-learning-page {
-  padding: 20px;
-  text-align: center;
+  background: #fff;
+  min-height: 100vh;
+  padding-bottom: 40px;
 }
 
-/* ============================================================
-   💡 핀터레스트(Masonry) 레이아웃 설정
-   ============================================================ */
+/* --- 헤더 --- */
+.il-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 22px 0 12px;
+  border-bottom: 2px solid #e60023;
+  margin-bottom: 4px;
+}
+
+.pinword-logo-circle {
+  width: 38px;
+  height: 38px;
+  background: #e60023;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  font-style: italic;
+  box-shadow: 0 2px 10px rgba(230, 0, 35, 0.45);
+  flex-shrink: 0;
+}
+
+.pinword-logo-text {
+  font-size: 24px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -0.5px;
+}
+
+.il-subtitle {
+  text-align: center;
+  font-size: 15px;
+  color: #767676;
+  margin: 14px 0 2px;
+}
+
+.il-count {
+  text-align: center;
+  font-size: 13px;
+  color: #e60023;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+/* --- Pinterest Masonry Grid --- */
 .masonry-grid {
-  /* 화면 넓이에 따라 기둥(column) 개수를 3개로 나눕니다. */
-  column-count: 3;
-  column-gap: 20px;
-  padding: 20px 0;
-  max-width: 1000px;
+  columns: 3;
+  column-gap: 12px;
+  padding: 0 12px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-/* 화면이 좁아지면(태블릿/모바일) 기둥 개수를 줄여줍니다. */
-@media (max-width: 768px) {
-  .masonry-grid { column-count: 2; }
+@media (max-width: 900px) {
+  .masonry-grid { columns: 2; }
 }
+
 @media (max-width: 480px) {
-  .masonry-grid { column-count: 1; }
+  .masonry-grid { columns: 2; column-gap: 8px; padding: 0 8px; }
 }
 
+/* --- 카드 컨테이너 (perspective 필수) --- */
 .masonry-item {
-  /* 카드가 기둥 사이에서 잘리지 않도록 보호합니다. */
   break-inside: avoid;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+  overflow: hidden;
   cursor: pointer;
-  
-  /* 3D 원근감을 주어 뒤집힐 때 입체적으로 보이게 합니다. */
-  perspective: 1000px; 
+  perspective: 900px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s, transform 0.2s;
+  background: #f5f5f5;
 }
 
-/* 이미지 원본 비율을 유지하면서 카드의 가로 크기에 맞춥니다. */
-.masonry-image {
-  width: 100%;
-  display: block;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.masonry-item:hover {
+  box-shadow: 0 8px 28px rgba(230, 0, 35, 0.22);
+  transform: translateY(-3px);
 }
 
-/* ============================================================
-   💡 3D 카드 뒤집기 (Flip) 애니메이션 설정
-   ============================================================ */
+/* --- 3D 플립 래퍼 --- */
 .flip-card-inner {
   position: relative;
   width: 100%;
-  height: 100%;
-  transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1); /* 부드러운 회전 속도 */
-  transform-style: preserve-3d; /* 자식 요소들도 3D 공간에 배치되도록 허용 */
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+  /* height는 앞면 이미지 자연 높이를 따름 */
 }
 
-/* React 상태에서 'flipped' 클래스가 추가되면 Y축으로 180도 회전시킵니다. */
 .flip-card-inner.flipped {
   transform: rotateY(180deg);
 }
 
-/* 앞면과 뒷면의 공통 설정: 뒷모습(backface)은 투명하게 숨깁니다. */
-.flip-card-front, .flip-card-back {
-  -webkit-backface-visibility: hidden; /* Safari 호환성 */
+/* --- 앞면 / 뒷면 공통 --- */
+.flip-card-front,
+.flip-card-back {
   backface-visibility: hidden;
-  border-radius: 12px;
+  -webkit-backface-visibility: hidden;
+  border-radius: 18px;
   overflow: hidden;
 }
 
-/* [카드 앞면] - 이미지가 높이를 결정하게 둡니다. */
+/* --- 앞면 — 이미지 --- */
 .flip-card-front {
-  position: relative; /* 앞면이 전체 높이를 잡습니다. */
+  width: 100%;
 }
 
-/* [카드 뒷면] - 앞면의 높이에 딱 맞춰 덮어씌웁니다. */
+.masonry-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+}
+
+/* --- 뒷면 — 빨간 배경에 단어 정보 --- */
 .flip-card-back {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #2c3e50; /* 칠판 같은 진한 남색 배경 */
-  color: white;
-  transform: rotateY(180deg); /* 시작부터 180도 뒤집어둔 상태로 대기합니다. */
-  
-  /* 뒷면 안의 텍스트들을 정중앙에 배치 (Flexbox) */
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg, #e60023 0%, #c0001d 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  min-height: 120px;
 }
 
 .back-content {
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 24px 16px;
   text-align: center;
+  width: 100%;
 }
 
-.back-english {
-  font-size: 24px;
-  margin: 0 0 5px 0;
-  color: #f1c40f; /* 영어 단어는 노란색으로 강조 */
-}
-
+/* 품사 뱃지 */
 .back-pos {
-  font-size: 14px;
-  color: #bdc3c7;
-  display: block;
-  margin-bottom: 10px;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #e60023;
+  background: #fff;
+  border-radius: 20px;
+  padding: 3px 12px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.15);
 }
 
-.back-meaning {
-  font-size: 18px;
+/* 영어 단어 */
+.back-english {
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  word-break: break-word;
+}
+
+/* 뜻 */
+.back-meaning {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  line-height: 1.45;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  word-break: keep-all;
 }

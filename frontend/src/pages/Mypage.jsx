@@ -72,7 +72,7 @@ const Mypage = () => {
                     <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                     <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
                     <Tooltip />
-                    <Line type="monotone" dataKey="score" stroke="#3498db" strokeWidth={3} dot={{ r: 5, fill: '#3498db' }} activeDot={{ r: 8 }} name="점수" />
+                    <Line type="monotone" dataKey="score" stroke="#e60023" strokeWidth={3} dot={{ r: 5, fill: '#e60023' }} activeDot={{ r: 8, fill: '#c0001d' }} name="점수" />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
